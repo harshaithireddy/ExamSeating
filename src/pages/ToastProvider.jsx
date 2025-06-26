@@ -70,7 +70,7 @@ export const ToastProvider = ({ children }) => {
     );
     setTimeout(() => {
       setToasts((prev) => prev.filter((toast) => toast.id !== id));
-    }, 100); // Faster removal
+    }, 100);
   };
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-// Import your splash page component
 import Login from './components/Login';
 import ChangePassword from './components/ChangePassword';
 import StudentDashboard from './pages/StudentDashboard';
@@ -13,7 +12,6 @@ import SplashPage from './pages/splash';
 function App() {
   const [showSplash, setShowSplash] = useState(true);
 
-  // Hide splash after 3 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
@@ -43,7 +41,6 @@ function App() {
     sessionStorage.setItem('authSession', JSON.stringify(userData));
   };
 
-  // Show splash page first
   if (showSplash) {
     return <SplashPage />;
   }
@@ -51,11 +48,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/change-password" element={<ChangePassword />} />
 
-        {/* Protected Routes */}
         <Route
           path="/dashboard/admin/*"
           element={

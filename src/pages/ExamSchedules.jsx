@@ -105,7 +105,6 @@ const ExamSchedules = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    // Parse date and adjust for timezone
     const parsedDate = new Date(formData.date);
     const adjustedDate = new Date(parsedDate.getTime() - parsedDate.getTimezoneOffset() * 60000);
 
@@ -170,20 +169,18 @@ const resetForm = () => {
   setShowModal(false);
 };
 
-// Add this utility function at the top of your component file
 const parseDate = (dateString) => {
   if (!dateString) return null;
-  
-  // Try different date formats
+
   const formats = [
-    'yyyy-MM-dd',    // 2025-06-23
-    'dd-MM-yyyy',    // 23-06-2025
-    'dd-MM-yy',      // 23-06-25
-    'MM/dd/yyyy',    // 06/23/2025
-    'MM/dd/yy',      // 06/23/25
-    'yyyy/MM/dd',    // 2025/06/23
-    'dd MMM yyyy',   // 23 Jun 2025
-    'MMM dd, yyyy'   // Jun 23, 2025
+    'yyyy-MM-dd',
+    'dd-MM-yyyy',
+    'dd-MM-yy',
+    'MM/dd/yyyy',
+    'MM/dd/yy',
+    'yyyy/MM/dd',
+    'dd MMM yyyy',
+    'MMM dd, yyyy'
   ];
   
   for (const format of formats) {
@@ -192,8 +189,7 @@ const parseDate = (dateString) => {
       return new Date(parsed.y, parsed.m - 1, parsed.d);
     }
   }
-  
-  // Fallback to native Date parsing
+
   const date = new Date(dateString);
   if (!isNaN(date.getTime())) {
     return date;
@@ -216,14 +212,13 @@ const handleFileUpload = async (e) => {
       const worksheet = workbook.Sheets[sheetName];
       let data = XLSX.utils.sheet_to_json(worksheet);
 
-      // Process dates in the uploaded data
       data = data.map(item => {
         const parsedDate = parseDate(item.date);
         return {
           ...item,
           date: parsedDate ? parsedDate.toISOString() : null
         };
-      }).filter(item => item.date !== null); // Filter out invalid dates
+      }).filter(item => item.date !== null);
 
       await axios.post(`${import.meta.env.VITE_API_URL}/api/exam-schedules/bulk`, data);
       fetchExams();
@@ -243,7 +238,7 @@ const handleFileUpload = async (e) => {
 const downloadTemplate = () => {
   const template = [
     {
-      date: '2025-02-15', // ISO format
+      date: '2025-02-15',
       time: 'FN',
       subject: 'Data Structures',
       subjectCode: 'CS301',
@@ -252,7 +247,7 @@ const downloadTemplate = () => {
       type: 'regular'
     },
     {
-      date: '15-02-2025', // European format
+      date: '15-02-2025',
       time: 'AN',
       subject: 'Algorithms',
       subjectCode: 'CS302',
@@ -261,7 +256,7 @@ const downloadTemplate = () => {
       type: 'regular'
     },
     {
-      date: '02/15/2025', // US format
+      date: '02/15/2025',
       time: 'FN',
       subject: 'Database Systems',
       subjectCode: 'CS303',
@@ -317,7 +312,6 @@ const getStatusText = (date) => {
 
   return (
     <div className="p-8 min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Exam Schedules</h1>
@@ -348,7 +342,6 @@ const getStatusText = (date) => {
         </div>
       </div>
 
-      {/* Upload Section */}
       <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Upload Exam Schedules from Excel</h2>
         <div className="flex items-center space-x-4">
@@ -358,7 +351,7 @@ const getStatusText = (date) => {
             onChange={handleFileUpload}
             className="hidden"
             id="exam-upload"
-            key={Date.now()} // Force re-render to reset input
+            key={Date.now()}
           />
           <label
             htmlFor="exam-upload"
@@ -375,7 +368,6 @@ const getStatusText = (date) => {
         </div>
       </div>
 
-      {/* Filters */}
       <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
         <div className="flex items-center space-x-4 mb-4">
           <Filter className="h-5 w-5 text-gray-500" />
@@ -401,7 +393,6 @@ const getStatusText = (date) => {
         </p>
       </div>
 
-      {/* Exams Table */}
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -475,7 +466,6 @@ const getStatusText = (date) => {
         </div>
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
